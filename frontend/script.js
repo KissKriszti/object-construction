@@ -1,89 +1,81 @@
-// 1. Get data; 2. Prepare data; 3. Components = Html elements we'd like to add to the document later; 4. Render = add the components to the document
-
-function Month(name, id, nth, days) {
-    this.name = name;
-    this.id = id;
-    this.nth = nth;
-    this.days = days;
+function Country(name, short, population, flag, continent) {
+    this.name = name
+    this.short = short
+    this.population = population
+    this.flag = flag
+    this.continent = continent
 }
 
-const months = [
-    new Month("January", "jan", 1, 31),
-    new Month("February", "feb", 2, 28),
-    new Month("March", "mar", 3, 31),
-    new Month("April", "apr", 4, 30),
-    new Month("May", "may", 5, 31),
-    new Month("June", "jun", 6, 30),
-    new Month("July", "jul", 7, 31),
-    new Month("August", "aug", 8, 31),
-    new Month("September", "sep", 9, 30),
-    new Month("October", "oct", 10, 31),
-    new Month("November", "nov", 11, 30),
-    new Month("December", "dec", 12, 31)
-];
-
-console.log(months)
-
-const monthSection = (id, h1, days) => {
+//Components
+const menuButton = () => {
     return `
-    <section id="${id}">
-        <h1>${h1}</h1>
-        <div class="days">${days}</div>
-    </section>
-    `;
+    <button id="menu-btn">
+        <svg width="40" height="40">
+            <rect width="20" height="2"/>
+            <rect width="20" height="2"/>
+            <rect width="20" height="2"/>
+        </svg>
+        <span>button</span>
+    </button>
+    `
 }
 
-const dayCard = (year, month, day) => {
+const header = (logo, button) => {
     return `
-    <div class="card">
-        <time>${year}</time>
-        <time>${month}</time>
-        <time>${day}</time>
-        <button class="card-btn">Get Day Name</button>
+    <header>
+        <a id="logo">${logo}</a>
+        ${button()}
+    </header>`
+}
+
+//Exercise
+const countryCards = (cards) => {
+    return `
+    <div id="cards">
+        ${cards}
     </div>
-    `;
+    `
 }
 
-const dayCards = (month, callDayCard) => {
-    let toReturn = "";
-    for (let i = 1; i <= month.days; i++) {
-        toReturn += callDayCard(2022, month.nth, i)
-    }
-
-    return toReturn
+const countryCard = (name, short, population, flag, continent) => {
+    return `
+    <div>
+        <h2>${name}</h2>
+        <h2>${short}</h2>
+        <p>${population}</p>
+        <img src="${flag}"></img>
+        <p>${continent}</p>
+    </div>
+    `
 }
 
-// console.log(dayCards(months[0], dayCard))
 
-const loadEvent = () => {
-    // const rootElement = document.getElementById("root")
+
+const loadEvent = async () => {
+    //Get data
+    const countryRes = await fetch("https://restcountries.com/v3.1/all");
+    const countryArr = await countryRes.json();
+    // console.log(countryArr[0])
+    //Process data
+    let countries = countryArr.map(function (country) {
+        return new Country(country.name.common, country.cca3, country.population, country.flags.svg, country.continents[0])
+    })
+    console.log(countries)
+    const rootElement = document.getElementById("root")
+    rootElement.insertAdjacentHTML('beforeend', header("Countries", menuButton))
+
+    //Exercise
     let content = ""
-    for (const month of months) {
-        // rootElement.insertAdjacentHTML('beforeend', dayCards(month, dayCard))
-        content += monthSection(month.id, month.name, dayCards(month, dayCard))
-    }
-    document.getElementById("root").insertAdjacentHTML("beforeend", content)
-
-    //click event
-    /* function cardButtonClickEvent(event) {
-        console.log(event.target.parentElement)
-        event.target.parentElement.classList.toggle("clicked")
+    for (let item of countries) {
+        content += countryCard(item.name, item.short, item.population, item.flag, item.continent)
     }
 
-    const cardList = document.querySelectorAll(".card")
-    for (let card of cardList) {
-        // console.log(card)
-        card.querySelector("button").addEventListener('click', cardButtonClickEvent)
-    } */
-    function clickEvent(event) {
-        // console.log(event.target)
-        if (event.target.classList.contains("card-btn")) {
-            console.log("Hello click")
-            event.target.innerHTML = "This button was clicked"
-        }
-    }
+    rootElement.insertAdjacentHTML('beforeend', countryCards(content))
 
-    document.addEventListener('click', clickEvent)
+    const menuButton1 = document.getElementById("menu-btn")
+    menuButton1.addEventListener('click', (event) => {
+        event.target.classList.toggle("clicked")
+    })
 }
 
 window.addEventListener('load', loadEvent)

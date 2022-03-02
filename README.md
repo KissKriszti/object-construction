@@ -7,3 +7,9 @@ You can use this repository as a template for your repository or copy the files 
 3. If you don't need it stop it with `Control + C` keycommand.
 
 You can write your frontend code (`HTML, CSS, JS`) into the `frontend` directory.
+
+2.feladat
+
+jelenítsük meg kártyaként ezt a kódot(countryt)
+egy componensbe mentsük el és azt hívjuk meg hogy valahol iteráljuk végig. 
+legyen egy country card (többször egymás után rakja be a másikba) komponens és legyen egy country cards (1db div cards id)
