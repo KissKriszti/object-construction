@@ -13,3 +13,7 @@ You can write your frontend code (`HTML, CSS, JS`) into the `frontend` directory
 jelenítsük meg kártyaként ezt a kódot(countryt)
 egy componensbe mentsük el és azt hívjuk meg hogy valahol iteráljuk végig. 
 legyen egy country card (többször egymás után rakja be a másikba) komponens és legyen egy country cards (1db div cards id)
+
+3. feladat
+
+készítsünk load eseményt új branchen (events), legyen egy form, amibe van 3 input mező (szöveges), legyen benne egy gomb, és az input mezőkre input eseményt tegyünk rá, console logolja ki az értékét az input mezőnek. 
